@@ -18,15 +18,14 @@ namespace AttachmentTask.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: false),
-                    Salary = table.Column<decimal>(type: "numeric", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    EmployeeName = table.Column<string>(type: "text", nullable: false),
-                    HireDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false)
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Salary = table.Column<decimal>(type: "numeric", nullable: true),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    EmployeeName = table.Column<string>(type: "text", nullable: true),
+                    HireDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,9 +38,8 @@ namespace AttachmentTask.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    FileData = table.Column<byte[]>(type: "bytea", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    FileData = table.Column<byte[]>(type: "bytea", nullable: true),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EmpolyeeId = table.Column<int>(type: "integer", nullable: false)
                 },

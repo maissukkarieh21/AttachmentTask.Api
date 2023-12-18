@@ -138,7 +138,6 @@ namespace AttachmentTask.Api.Controllers
                     LastName = employeeDTO.LastName,
                     Email = employeeDTO.Email,
                     Phone = employeeDTO.Phone,
-                    Image = employeeDTO.Image,
                     Salary = employeeDTO.Salary,
                     EmployeeName = employeeDTO.EmployeeName,
                     HireDate = DateTime.UtcNow,
@@ -172,7 +171,6 @@ namespace AttachmentTask.Api.Controllers
                         var attachment = new Attachment
                         {
                             Name = file.FileName,
-                            Description = employeeDTO.Description,
                             FileData = fileBytes,
                             Date = DateTime.UtcNow,
                             Employee = employee
@@ -194,67 +192,6 @@ namespace AttachmentTask.Api.Controllers
             }
         }
 
-
-        //[HttpPost("addEmployee")]
-        //public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
-        //{
-        //    var employee = new Employee 
-        //    {
-        //        FirstName = employeeDto.FirstName,
-        //        LastName = employeeDto.LastName,
-        //        Email = employeeDto.Email,
-        //        Phone = employeeDto.Phone,
-        //        Image = employeeDto.Image,
-        //        Salary = employeeDto.Salary,
-        //        EmployeeName = employeeDto.EmployeeName,
-        //        HireDate = DateTime.UtcNow,
-        //        Address = employeeDto.Address
-
-        //    };
-
-
-
-        //    return Ok();
-        //}
-
-        //[HttpPost("addEmployee")]
-        //public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
-        //{
-        //    try
-        //    {
-        //        var employee = new Employee
-        //        {
-        //            FirstName = employeeDto.FirstName,
-        //            LastName = employeeDto.LastName,
-        //            Email = employeeDto.Email,
-        //            Phone = employeeDto.Phone,
-        //            Image = employeeDto.Image,
-        //            Salary = employeeDto.Salary,
-        //            EmployeeName = employeeDto.EmployeeName,
-        //            HireDate = DateTime.UtcNow,
-        //            Address = employeeDto.Address
-        //        };
-
-        //        await _employeeRepository.AddAsync(employee);
-
-        //        // Retrieve attachments associated with the temporary identifier
-        //        var attachments = await _attachmentRepository.GetAttachmentsByTemporaryEmployeeIdAsync(employeeDto.TemporaryEmployeeId);
-
-        //        // Update each attachment with the created employee's EmployeeId
-        //        foreach (var attachment in attachments)
-        //        {
-        //            attachment.EmployeeId = employee.Id;
-        //            await _attachmentRepository.UpdateAsync(attachment);
-        //        }
-
-        //        return Ok(new { EmployeeId = employee.Id });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
-        //    }
-        //}
-
         [HttpPost("addEmployee")]
         public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
         {
@@ -266,7 +203,6 @@ namespace AttachmentTask.Api.Controllers
                     LastName = employeeDto.LastName,
                     Email = employeeDto.Email,
                     Phone = employeeDto.Phone,
-                    Image = employeeDto.Image,
                     Salary = employeeDto.Salary,
                     EmployeeName = employeeDto.EmployeeName,
                     HireDate = DateTime.UtcNow,
