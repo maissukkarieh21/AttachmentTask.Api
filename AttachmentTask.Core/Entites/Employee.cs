@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 
 namespace AttachmentTask.Core.Entites
@@ -14,8 +15,9 @@ namespace AttachmentTask.Core.Entites
         public string ? EmployeeName { get; set; }
         public DateTime  ?HireDate { get; set; }
         public string ? Address { get; set; }
-        public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
 
+        public int AttachmentsGroupId { get; set; }
+        public AttachmentsGroup? AttachmentsGroup { get; set; }
 
     }
 }

@@ -20,7 +20,6 @@ namespace AttachmentTask.Infrastructure.Repositories
         public async Task<Employee> GetByIdAsync(int id)
         {
             return await _dbContext.Employees
-                .Include(e => e.Attachments)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 

@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+builder.Services.AddScoped<IAttachmentGroupRepository, AttachmentGroupRepository>();
 
 builder.Services.AddCors(corsOptions =>
 {

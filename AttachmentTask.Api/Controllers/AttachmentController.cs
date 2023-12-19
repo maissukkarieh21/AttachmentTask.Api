@@ -3,6 +3,7 @@ using AttachmentTask.Core.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 
 
+
 namespace AttachmentTask.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -17,65 +18,41 @@ namespace AttachmentTask.Api.Controllers
             _employeeRepository = employeeRepository;
         }
 
-        [HttpGet("getAttachmentsByEmployee/{employeeId}")]
-        public async Task<IActionResult> GetAttachmentsByEmployee(int employeeId)
-        {
-            var attachments = await _attachmentRepository.GetAttachmentsByEmployeeIdAsync(employeeId);
-            return Ok(attachments);
-        }
+        
 
-        [HttpGet("getAttachmentsById/{attachmentId}")]
-        public async Task<IActionResult> GetAttachmentsById(int attachmentId)
+
+        [HttpGet("getAttachment/{Id}")]
+        public async Task<IActionResult> GetAttachmentById(int attachmentId)
         {
             var attachments = await _attachmentRepository.GetByIdAsync(attachmentId);
             return Ok(attachments);
         }
 
+        
 
-        [HttpPost("addAttachment")]
-        public async Task<IActionResult> AddAttachment(List<IFormFile> Files)
+        [HttpGet("downloadAttachment/{attachmentId}")]
+        public async Task<IActionResult> DownloadAttachment(int attachmentId)
         {
-                var temporaryEmployeeId = GenerateTemporaryEmployeeId();
-                foreach (var file in Files)
+            try
+            {
+                var attachment = await _attachmentRepository.GetByIdAsync(attachmentId);
+
+                if (attachment == null)
                 {
-                    if (file.Length > 20 * 1024 * 1024)
-
-                    {
-                        return BadRequest("File size exceeds the maximum limit (20 MB).");
-
-                    }
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".docx" };
-
-                    var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-                    if (!allowedExtensions.Contains(fileExtension))
-
-                    {
-                        return BadRequest("Invalid file type. Allowed types are: " + string.Join(", ", allowedExtensions));
-                    }
-                    var attachment = new Attachment
-                    {
-                        Name = file.FileName,
-                        Date = DateTime.UtcNow,
-                        EmpolyeeId = temporaryEmployeeId,
-                    };
-
-                    using (var stream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(stream);
-                        attachment.FileData = stream.ToArray();
-                    }
-
-                    await _attachmentRepository.AddAsync(attachment);
+                    return NotFound();
                 }
-                return Ok(new { TemporaryEmployeeId = temporaryEmployeeId });
+                var fileContentResult = new FileContentResult(attachment.FileData, "application/octet-stream")
+                {
+                    FileDownloadName = attachment.Name
+                };
+
+                return fileContentResult;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
+            }
         }
 
-
-        private int GenerateTemporaryEmployeeId()
-        {
-            int temporaryEmployeeCounter = 1;
-            return temporaryEmployeeCounter++;
-        }
     }
 }

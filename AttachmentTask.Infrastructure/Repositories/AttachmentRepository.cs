@@ -11,10 +11,10 @@ namespace AttachmentTask.Infrastructure.Repositories
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
-        public async Task<IEnumerable<Attachment>> GetAttachmentsByEmployeeIdAsync(int employeeId)
-        {
-            return await _dbContext.Attachments.Where(a => a.EmpolyeeId == employeeId).ToListAsync();
-        }
+        //public async Task<IEnumerable<Attachment>> GetAttachmentsByEmployeeIdAsync(int employeeId)
+        //{
+        //    return await _dbContext.Attachments.Where(a => a.EmpolyeeId == employeeId).ToListAsync();
+        //}
 
         public async Task AddAsync(Attachment attachment)
         {
@@ -27,11 +27,11 @@ namespace AttachmentTask.Infrastructure.Repositories
             _dbContext.SaveChanges();
         }
 
-        public async Task<Attachment> GetByIdAsync(int id)
-        {
-            return  _dbContext.Attachments.FirstOrDefault(a => a.Id == id);
+        //public async Task<Attachment> GetByIdAndEmployeeIdAsync(int employeeId,int id)
+        //{
+        //    return  _dbContext.Attachments.Where(a=>a.EmpolyeeId== employeeId).FirstOrDefault(a => a.Id == id);
 
-        }
+        //}
 
         public async Task UpdateAsync(Attachment attachment)
         {
@@ -39,11 +39,16 @@ namespace AttachmentTask.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Attachment>> GetAttachmentsByTemporaryEmployeeIdAsync(string temporaryEmployeeId)
+        //public async Task<IEnumerable<Attachment>> GetAttachmentsByTemporaryEmployeeIdAsync(string temporaryEmployeeId)
+        //{
+        //    return await _dbContext.Attachments
+        //        .Where(a => a.EmpolyeeId.ToString() == temporaryEmployeeId)
+        //        .ToListAsync();
+        //}
+
+        public async Task<Attachment> GetByIdAsync(int id)
         {
-            return await _dbContext.Attachments
-                .Where(a => a.EmpolyeeId.ToString() == temporaryEmployeeId)
-                .ToListAsync();
+            return _dbContext.Attachments.FirstOrDefault(a => a.Id == id);
         }
     }
 }

@@ -10,6 +10,6 @@
         public string EmployeeName { get; set; }
         public DateTime HireDate { get; set; }
         public string Address { get; set; }
-        public string TemporaryEmployeeId { get; set; } 
+        //public string TemporaryEmployeeId { get; set; } 
     }
 }

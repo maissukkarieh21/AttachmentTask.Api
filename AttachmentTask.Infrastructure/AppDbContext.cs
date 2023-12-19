@@ -9,6 +9,7 @@ namespace AttachmentTask.Infrastructure
 
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<AttachmentsGroup> AttachmentsGroup { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,9 +18,6 @@ namespace AttachmentTask.Infrastructure
                 entity.HasKey(e => e.Id);
                 entity.ToTable("attachments");
 
-                entity.HasOne(d => d.Employee).WithMany(p => p.Attachments)
-                    .HasForeignKey(d => d.EmpolyeeId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -29,7 +27,25 @@ namespace AttachmentTask.Infrastructure
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
+
+
             });
+
+            modelBuilder.Entity<AttachmentsGroup>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.ToTable("attachmentsGroup");
+
+                
+
+
+                //    modelBuilder.Entity<SystemAttachments>()
+                //.HasOne(ea => ea.Attachment)
+                //.WithMany() // No navigation property in Attachment
+                //.HasForeignKey(ea => ea.AttachmentId);
+
+            });
+
         }
     }
 }

@@ -20,58 +20,12 @@ namespace AttachmentTask.Api.Controllers
             _employeeRepository = employeeRepository;
         }
 
-        //[HttpPost("addEmployeeWithAttachments")]
-        //public async Task<IActionResult> AddEmployeeWithAttachments([FromForm] EmployeeWithAttachmentsDTO employeeDTO)
-        //{
-        //    if (employeeDTO == null || employeeDTO.Attachments == null || !employeeDTO.Attachments.Any())
-        //    {
-        //        return BadRequest("Invalid data");
-        //    }
-
-        //    var employee = new Employee
-        //    {
-        //        FirstName = employeeDTO.FirstName,
-        //LastName = employeeDTO.LastName,
-        //Email= employeeDTO.Email,
-        //Phone= employeeDTO.Phone,
-        //Image = employeeDTO.Image,
-        //Salary= employeeDTO.Salary,
-        //EmployeeName = employeeDTO.EmployeeName,
-        //HireDate = employeeDTO.HireDate,
-        //Address = employeeDTO.Address
-        //    };
-
-        //    foreach (var attachmentDTO in employeeDTO.Attachments)
-        //    {
-        //        using (var ms = new MemoryStream())
-        //        {
-        //            await attachmentDTO.FileData.CopyToAsync(ms);
-        //            var fileBytes = ms.ToArray();
-
-        //            var attachment = new Attachment
-        //            {
-        //                Name = attachmentDTO.Name,
-        //                Description = attachmentDTO.Description,
-        //                FileData = fileBytes,
-        //                Employee = employee
-        //            };
-
-        //            employee.Attachments.Add(attachment);
-
-        //            await _attachmentRepository.AddAsync(attachment);
-        //        }
-        //    }
-
-        //    // Repository responsibility: Save employee and its associated attachments to the database
-        //    await _employeeRepository.AddAsync(employee);
-
-        //    return Ok(employee.Id);
-        //}
+        
 
         //[HttpPost("addEmployeeWithAttachments")]
         //public async Task<IActionResult> AddEmployeeWithAttachments([FromForm] EmployeeWithAttachmentsDTO employeeDTO)
         //{
-        //    if (employeeDTO == null || employeeDTO.FileData == null)
+        //    if (employeeDTO == null || employeeDTO.Files == null || !employeeDTO.Files.Any())
         //    {
         //        return BadRequest("Invalid data");
         //    }
@@ -84,10 +38,9 @@ namespace AttachmentTask.Api.Controllers
         //            LastName = employeeDTO.LastName,
         //            Email = employeeDTO.Email,
         //            Phone = employeeDTO.Phone,
-        //            Image = employeeDTO.Image,
         //            Salary = employeeDTO.Salary,
         //            EmployeeName = employeeDTO.EmployeeName,
-        //            HireDate = employeeDTO.HireDate,
+        //            HireDate = DateTime.UtcNow,
         //            Address = employeeDTO.Address
         //        };
 
@@ -95,136 +48,49 @@ namespace AttachmentTask.Api.Controllers
 
         //        var employeeId = employee.Id;
 
-        //        using (var ms = new MemoryStream())
+        //        foreach (var file in employeeDTO.Files)
         //        {
-        //            await employeeDTO.FileData.CopyToAsync(ms);
-        //            var fileBytes = ms.ToArray();
-
-        //            var attachment = new Attachment
+        //            if (file.Length > 20 * 1024 * 1024)
         //            {
-        //                Name = employeeDTO.Name,
-        //                Description = employeeDTO.Description,
-        //                FileData = fileBytes,
-        //                Date = DateTime.UtcNow,
-        //                EmpolyeeId = employeeId
-        //            };
+        //                return BadRequest("File size exceeds the maximum limit (20 MB).");
+        //            }
 
-        //            await _attachmentRepository.AddAsync(attachment);
-        //            employee.Attachments.Add(attachment);
-        //            await _employeeRepository.UpdateAsync(employee);
+        //            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif",".pdf",".docx" };
+        //            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        //            if (!allowedExtensions.Contains(fileExtension))
+        //            {
+        //                return BadRequest("Invalid file type. Allowed types are: " + string.Join(", ", allowedExtensions));
+        //            }
+
+        //            using (var ms = new MemoryStream())
+        //            {
+        //                await file.CopyToAsync(ms);
+        //                var fileBytes = ms.ToArray();
+
+        //                var attachment = new Attachment
+        //                {
+        //                    Name = file.FileName,
+        //                    FileData = fileBytes,
+        //                    Date = DateTime.UtcNow,
+        //                    //Employee = employee
+        //                };
+
+        //                //employee.Attachments.Add(attachment);
+
+        //                await _attachmentRepository.AddAsync(attachment);
+        //            }
         //        }
+
+        //         await _employeeRepository.UpdateAsync(employee);
 
         //        return Ok(employee);
         //    }
         //    catch (Exception ex)
         //    {
-        //        return StatusCode(500, new { Message = "An error occurred while processing the request.", Details = ex.ToString() });
+        //        return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
         //    }
         //}
-
-        [HttpPost("addEmployeeWithAttachments")]
-        public async Task<IActionResult> AddEmployeeWithAttachments([FromForm] EmployeeWithAttachmentsDTO employeeDTO)
-        {
-            if (employeeDTO == null || employeeDTO.Files == null || !employeeDTO.Files.Any())
-            {
-                return BadRequest("Invalid data");
-            }
-
-            try
-            {
-                var employee = new Employee
-                {
-                    FirstName = employeeDTO.FirstName,
-                    LastName = employeeDTO.LastName,
-                    Email = employeeDTO.Email,
-                    Phone = employeeDTO.Phone,
-                    Salary = employeeDTO.Salary,
-                    EmployeeName = employeeDTO.EmployeeName,
-                    HireDate = DateTime.UtcNow,
-                    Address = employeeDTO.Address
-                };
-
-                await _employeeRepository.AddAsync(employee);
-
-                var employeeId = employee.Id;
-
-                foreach (var file in employeeDTO.Files)
-                {
-                    if (file.Length > 20 * 1024 * 1024)
-                    {
-                        return BadRequest("File size exceeds the maximum limit (20 MB).");
-                    }
-
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif",".pdf",".docx" };
-                    var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-                    if (!allowedExtensions.Contains(fileExtension))
-                    {
-                        return BadRequest("Invalid file type. Allowed types are: " + string.Join(", ", allowedExtensions));
-                    }
-
-                    using (var ms = new MemoryStream())
-                    {
-                        await file.CopyToAsync(ms);
-                        var fileBytes = ms.ToArray();
-
-                        var attachment = new Attachment
-                        {
-                            Name = file.FileName,
-                            FileData = fileBytes,
-                            Date = DateTime.UtcNow,
-                            Employee = employee
-                        };
-
-                        employee.Attachments.Add(attachment);
-
-                        await _attachmentRepository.AddAsync(attachment);
-                    }
-                }
-
-                 await _employeeRepository.UpdateAsync(employee);
-
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
-            }
-        }
-
-        [HttpPost("addEmployee")]
-        public async Task<IActionResult> AddEmployee([FromBody] EmployeeDto employeeDto)
-        {
-            try
-            {
-                var employee = new Employee
-                {
-                    FirstName = employeeDto.FirstName,
-                    LastName = employeeDto.LastName,
-                    Email = employeeDto.Email,
-                    Phone = employeeDto.Phone,
-                    Salary = employeeDto.Salary,
-                    EmployeeName = employeeDto.EmployeeName,
-                    HireDate = DateTime.UtcNow,
-                    Address = employeeDto.Address
-                };
-
-                await _employeeRepository.AddAsync(employee);
-                var attachments = await _attachmentRepository.GetAttachmentsByTemporaryEmployeeIdAsync(employeeDto.TemporaryEmployeeId);
-                foreach (var attachment in attachments)
-                {
-                    attachment.EmpolyeeId = employee.Id;
-                    await _attachmentRepository.UpdateAsync(attachment);
-                }
-
-                return Ok(new { EmployeeId = employee.Id });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while processing the request.", details = ex.Message });
-            }
-        }
-
 
         [HttpGet("getEmployeeWithAttachments/{employeeId}")]
         public async Task<IActionResult> GetEmployeeWithAttachments(int employeeId)

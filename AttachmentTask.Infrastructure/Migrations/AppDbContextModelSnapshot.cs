@@ -30,11 +30,11 @@ namespace AttachmentTask.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AttachmentsGroupId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("EmpolyeeId")
-                        .HasColumnType("integer");
 
                     b.Property<byte[]>("FileData")
                         .HasColumnType("bytea");
@@ -44,9 +44,22 @@ namespace AttachmentTask.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpolyeeId");
+                    b.HasIndex("AttachmentsGroupId");
 
                     b.ToTable("attachments", (string)null);
+                });
+
+            modelBuilder.Entity("AttachmentTask.Core.Entites.AttachmentsGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("attachmentsGroup", (string)null);
                 });
 
             modelBuilder.Entity("AttachmentTask.Core.Entites.Employee", b =>
@@ -59,6 +72,9 @@ namespace AttachmentTask.Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
+
+                    b.Property<int>("AttachmentsGroupId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -83,21 +99,30 @@ namespace AttachmentTask.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AttachmentsGroupId");
+
                     b.ToTable("employees", (string)null);
                 });
 
             modelBuilder.Entity("AttachmentTask.Core.Entites.Attachment", b =>
                 {
-                    b.HasOne("AttachmentTask.Core.Entites.Employee", "Employee")
+                    b.HasOne("AttachmentTask.Core.Entites.AttachmentsGroup", null)
                         .WithMany("Attachments")
-                        .HasForeignKey("EmpolyeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
+                        .HasForeignKey("AttachmentsGroupId");
                 });
 
             modelBuilder.Entity("AttachmentTask.Core.Entites.Employee", b =>
+                {
+                    b.HasOne("AttachmentTask.Core.Entites.AttachmentsGroup", "AttachmentsGroup")
+                        .WithMany()
+                        .HasForeignKey("AttachmentsGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AttachmentsGroup");
+                });
+
+            modelBuilder.Entity("AttachmentTask.Core.Entites.AttachmentsGroup", b =>
                 {
                     b.Navigation("Attachments");
                 });
