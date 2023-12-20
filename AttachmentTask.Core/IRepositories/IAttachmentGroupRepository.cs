@@ -6,6 +6,6 @@ namespace AttachmentTask.Core.IRepositories
     {
         Task AddAsync(AttachmentsGroup attachmentsGroup);
         Task UpdateAsync(AttachmentsGroup attachmentsGroup);
-        Task<AttachmentsGroup> GetByIdAsync(int id);
+        Task<List<int>> GetAttachmentIdsByGroupIdAsync(int groupId);
     }
 }

@@ -68,7 +68,7 @@ namespace AttachmentTask.Api.Controllers
                     attachmentIds.Add(attachment.Id);
                 }
 
-                return Ok(new { AttachmentIds = attachmentIds, AttachmentsGroupId = employeeAttachmentsGroup.Id });
+                return Ok( employeeAttachmentsGroup.Id );
             }
             catch (Exception ex)
             {

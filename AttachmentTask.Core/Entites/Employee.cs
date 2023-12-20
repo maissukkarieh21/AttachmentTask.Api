@@ -17,7 +17,7 @@ namespace AttachmentTask.Core.Entites
         public string ? Address { get; set; }
 
         public int AttachmentsGroupId { get; set; }
-        public AttachmentsGroup? AttachmentsGroup { get; set; }
+        public AttachmentsGroup AttachmentsGroup { get; set; }
 
     }
 }

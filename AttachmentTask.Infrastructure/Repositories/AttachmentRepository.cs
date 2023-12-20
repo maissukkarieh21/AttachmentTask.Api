@@ -27,11 +27,6 @@ namespace AttachmentTask.Infrastructure.Repositories
             _dbContext.SaveChanges();
         }
 
-        //public async Task<Attachment> GetByIdAndEmployeeIdAsync(int employeeId,int id)
-        //{
-        //    return  _dbContext.Attachments.Where(a=>a.EmpolyeeId== employeeId).FirstOrDefault(a => a.Id == id);
-
-        //}
 
         public async Task UpdateAsync(Attachment attachment)
         {
@@ -39,16 +34,37 @@ namespace AttachmentTask.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        //public async Task<IEnumerable<Attachment>> GetAttachmentsByTemporaryEmployeeIdAsync(string temporaryEmployeeId)
-        //{
-        //    return await _dbContext.Attachments
-        //        .Where(a => a.EmpolyeeId.ToString() == temporaryEmployeeId)
-        //        .ToListAsync();
-        //}
 
         public async Task<Attachment> GetByIdAsync(int id)
         {
             return _dbContext.Attachments.FirstOrDefault(a => a.Id == id);
         }
+
+        public async Task<List<int>> GetAttachmentIdsByGroupIdAsync(int groupId)
+        {
+            var attachmentIds = await _dbContext.Employees
+                .Where(e => e.AttachmentsGroupId == groupId)
+                .SelectMany(e => e.AttachmentsGroup.Attachments.Select(a => a.Id))
+                .ToListAsync();
+
+            return attachmentIds;
+        }
+
+        public async Task<List<Attachment>> GetAttachmentDetailsByGroupIdAsync(int groupId)
+        {
+            var attachments = await _dbContext.Employees
+                .Where(e => e.AttachmentsGroupId == groupId)
+                .SelectMany(e => e.AttachmentsGroup.Attachments.Select(a => new Attachment
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    FileData = a.FileData
+                }))
+                .ToListAsync();
+
+            return attachments;
+        }
+
+
     }
 }

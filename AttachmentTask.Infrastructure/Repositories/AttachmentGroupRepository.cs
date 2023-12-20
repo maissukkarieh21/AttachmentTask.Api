@@ -1,6 +1,7 @@
 ﻿using AttachmentTask.Core.Entites;
 using AttachmentTask.Core.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 
 namespace AttachmentTask.Infrastructure.Repositories
@@ -31,10 +32,17 @@ namespace AttachmentTask.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<AttachmentsGroup> GetByIdAsync(int id)
+        public async Task<List<int>> GetAttachmentIdsByGroupIdAsync(int groupId)
         {
-            return await _dbContext.AttachmentsGroup
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var attachmentIds = await _dbContext.AttachmentsGroup
+                .Where(group => group.Id == groupId)
+                .SelectMany(group => group.Attachments.Select(attachment => attachment.Id))
+                .ToListAsync();
+
+            return attachmentIds;
         }
+
+
+
     }
 }

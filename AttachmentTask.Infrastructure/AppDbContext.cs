@@ -36,14 +36,6 @@ namespace AttachmentTask.Infrastructure
                 entity.HasKey(e => e.Id);
                 entity.ToTable("attachmentsGroup");
 
-                
-
-
-                //    modelBuilder.Entity<SystemAttachments>()
-                //.HasOne(ea => ea.Attachment)
-                //.WithMany() // No navigation property in Attachment
-                //.HasForeignKey(ea => ea.AttachmentId);
-
             });
 
         }

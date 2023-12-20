@@ -12,10 +12,12 @@ namespace AttachmentTask.Api.Controllers
     {
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        public AttachmentController(IAttachmentRepository attachmentRepository, IEmployeeRepository employeeRepository)
+        private readonly IAttachmentGroupRepository _attachmentGroupRepository;
+        public AttachmentController(IAttachmentRepository attachmentRepository, IEmployeeRepository employeeRepository, IAttachmentGroupRepository attachmentGroupRepository)
         {
             _attachmentRepository = attachmentRepository;
             _employeeRepository = employeeRepository;
+            _attachmentGroupRepository = attachmentGroupRepository;
         }
 
         
@@ -54,5 +56,22 @@ namespace AttachmentTask.Api.Controllers
             }
         }
 
+
+        [HttpGet("attachmentIds/{groupId}")]
+        public async Task<IActionResult> GetAttachmentIdsByGroupId(int groupId)
+        {
+            var attachmentIds = await _attachmentRepository.GetAttachmentIdsByGroupIdAsync(groupId);
+
+            return Ok(attachmentIds);
+        }
+
+        [HttpGet("attachmentDetails/{groupId}")]
+        public async Task<IActionResult> GetAttachmentDetailsByGroupId(int groupId)
+        {
+            var attachmentDetails = await _attachmentRepository.GetAttachmentDetailsByGroupIdAsync(groupId);
+
+            return Ok(attachmentDetails);
+        }
     }
+    
 }

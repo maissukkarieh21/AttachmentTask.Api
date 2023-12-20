@@ -8,6 +8,6 @@ namespace AttachmentTask.Core.Entites
 {
     public class AttachmentsGroup:BaseEntity
     {
-        public ICollection<Attachment>? Attachments { get; set; } = new List<Attachment>();
+        public List<Attachment> Attachments { get; set; } = new List<Attachment>();
     }
 }

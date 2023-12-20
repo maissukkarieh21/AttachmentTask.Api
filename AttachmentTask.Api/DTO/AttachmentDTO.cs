@@ -9,9 +9,9 @@ namespace AttachmentTask.Api.DTO
 {
     public class AttachmentDTO
     {
-        //public string Name { get; set; }
-        public string? Description { get; set; }
-        //public List<IFormFile> Files { get; set; }
-        //public int ?EmployeeId { get; set; }
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public string? Name { get; set; }
+        public byte[]? FileData { get; set; }
     }
 }
